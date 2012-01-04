@@ -271,7 +271,10 @@ It has the same format as `ispell-dictionary-alist'.")
 (defun rw-hunspell-make-default-dictionary-entry ()
   "Make a default dictionary entry for the specified dictionary."
   (catch 'found
-    (let ((locale (car (split-string (getenv "LANG") "[.@]"))))
+    (let ((lang (getenv "LANG"))
+          (locale (or (and (boundp 'lang)
+                           (car (split-string lang "[.@]")))
+                      "en_US")))
       (dolist (entry (append ispell-local-dictionary-alist
                              rw-hunspell-dictionary-alist))
         (let* ((name (or (car entry) "default"))
